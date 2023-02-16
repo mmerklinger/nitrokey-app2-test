@@ -1,0 +1,113 @@
+name: Continuous delivery - Windows
+
+on:
+  release:
+    types: [published, unpublished]
+
+env:
+  FLIT_ROOT_INSTALL: 1
+
+jobs:
+  build-onedir:
+    name: Build onedir
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Create virtual environment
+        run: |
+          python -m venv venv
+          .\venv\Scripts\Activate.ps1
+          .\venv\Scripts\pip install pip
+          .\venv\Scripts\pip install flit
+          .\venv\Scripts\flit install --symlink
+      - name: Build onedir
+        run: |
+          .\venv\Scripts\Activate.ps1
+          pyinstaller ci-scripts/windows/pyinstaller/nitrokey-app-onedir.spec
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: nitrokey-app-onedir
+          path: |
+            dist/nitrokey-app
+  build-onefile:
+    name: Build onefile
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Create virtual environment
+        run: |
+          python -m venv venv
+          .\venv\Scripts\Activate.ps1
+          .\venv\Scripts\pip install pip
+          .\venv\Scripts\pip install flit
+          .\venv\Scripts\flit install --symlink
+      - name: Build onefile
+        run: |
+          .\venv\Scripts\Activate.ps1
+          pyinstaller ci-scripts/windows/pyinstaller/nitrokey-app-onefile.spec
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: nitrokey-app-onefile
+          path: dist/nitrokey-app.exe
+  build-msi-installer:
+    name: Build MSI installer
+    runs-on: windows-latest
+    needs: build-onedir
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nitrokey-app-onedir
+      - name: Create sources file
+        run: heat dir .\dist\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog: Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
+      - name: Build object files
+        run: |
+          candle .\ci-scripts\windows\wix\Product.wxs -out Product.wixobj
+          candle .\Sources.wxs .\Sources.wixobj
+      - name: Build installer package
+        run: light -b .\dist\nitrokey-app\ .\Product.wixobj .\Sources.wixobj -o nitrokey-app.msi
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nitrokey-app-installer
+          path: nitrokey-app-${{ github.event.release.tag_name }}-windows-x64.msi
+  publish-binary:
+    name: Publish binary
+    runs-on: windows-latest
+    needs: build-onefile
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nitrokey-app-onefile
+      - name: Rename binary
+        run: mv nitrokey-app.exe nitrokey-app-x64-${{ github.event.release.tag_name }}.exe
+      - name: Create archive
+        run: 7z a -tzip -mx9 nitrokey-app-${{ github.event.release.tag_name }}-windows-x64-binary.zip nitrokey-app-x64-${{ github.event.release.tag_name }}.exe
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: nitrokey-app-${{ github.event.release.tag_name }}-windows-x64-binary.zip
+  publish-msi-installer:
+    name: Publish MSI installer
+    runs-on: windows-latest
+    needs: build-onefile
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nitrokey-app-installer
+      - name: Rename installer
+        run: mv nitrokey-app.msi nitrokey-app-x64-${{ github.event.release.tag_name }}.msi
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: nitrokey-app-x64-${{ github.event.release.tag_name }}.msi
