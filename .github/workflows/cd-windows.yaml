@@ -64,7 +64,7 @@ jobs:
           name: nitrokey-app-onedir
       - name: Add WIX binaries to Path
         run: |
-          $Env:Path += "$Env:WIX" + "bin"
+          $Env:Path += ";" + "$Env:WIX" + "bin"
           echo $Env:Path
       - name: Create sources file
         run: |
