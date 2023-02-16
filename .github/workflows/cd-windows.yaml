@@ -62,6 +62,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nitrokey-app-onedir
+      - name: Add WIX binaries to Path
+        run: $Env:Path += "$Env:WIX" + "bin"
       - name: Create sources file
         run: |
           heat `
