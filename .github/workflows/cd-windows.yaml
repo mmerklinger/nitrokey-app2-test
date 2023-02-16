@@ -62,12 +62,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nitrokey-app-onedir
-      - name: Add WIX binaries to Path
-        run: |
-          $Env:Path += ";" + "$Env:WIX" + "bin" + ";"
+      # - name: Add WIX binaries to Path
+      #   run: |
+      #     $Env:Path += ";" + "$Env:WIX" + "bin" + ";"
       - name: Create sources file
         run: |
-          echo $Env:Path
+          "{$Env:WIX}" >> $env:GITHUB_PATH
           heat dir .\dist\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
       - name: Build object files
         run: |
