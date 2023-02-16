@@ -114,7 +114,7 @@ jobs:
   publish-msi-installer:
     name: Publish MSI installer
     runs-on: windows-latest
-    needs: build-onefile
+    needs: build-msi-installer
     permissions:
       contents: write
     steps:
