@@ -29,8 +29,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: nitrokey-app-onedir
-          path: |
-            dist/nitrokey-app
+          path: dist/nitrokey-app
   # build-onefile:
   #   name: Build onefile
   #   runs-on: windows-latest
@@ -62,11 +61,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nitrokey-app-onedir
+          path: dist/nitrokey-app
       - name: Create sources file
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
           ls
-          heat dir .\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
+          heat dir .\dist\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
       - name: Build object files
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
