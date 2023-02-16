@@ -63,7 +63,24 @@ jobs:
         with:
           name: nitrokey-app-onedir
       - name: Create sources file
-        run: heat dir .\dist\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog: Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
+        run: |
+          heat `
+            dir `
+            .\dist\nitrokey-app\ `
+            -dr INSTALLFOLDER `
+            -ag `
+            -cg DynamicFragment `
+            -ke `
+            -srd `
+            -sfrag `
+            -nologo `
+            -pog:Binaries `
+            -pog:Documents `
+            -pog: Satellites `
+            -pog:Sources `
+            -pog:Content `
+            -sreg `
+            -o Sources.wxs
       - name: Build object files
         run: |
           candle .\ci-scripts\windows\wix\Product.wxs -out Product.wixobj
