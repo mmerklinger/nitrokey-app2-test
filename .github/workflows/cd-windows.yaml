@@ -65,7 +65,7 @@ jobs:
       - name: Create sources file
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
-          heat dir .\dist\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
+          heat dir .\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
       - name: Build object files
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: nitrokey-app-installer
-          path: nitrokey-app-${{ github.event.release.tag_name }}-windows-x64.msi
+          path: nitrokey-app.msi
   # publish-binary:
   #   name: Publish binary
   #   runs-on: windows-latest
