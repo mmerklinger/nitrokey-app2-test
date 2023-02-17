@@ -61,12 +61,11 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nitrokey-app-onedir
-          path: dist/nitrokey-app
+          path: nitrokey-app
       - name: Create sources file
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
-          ls
-          heat dir .\dist\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
+          heat dir .\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
       - name: Build object files
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
@@ -75,7 +74,7 @@ jobs:
       - name: Build installer package
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
-          light -b .\dist\nitrokey-app\ .\Product.wixobj .\Sources.wixobj -o nitrokey-app.msi
+          light -b .\nitrokey-app\ .\Product.wixobj .\Sources.wixobj -o nitrokey-app.msi
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
