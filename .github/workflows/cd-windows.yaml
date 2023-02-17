@@ -57,15 +57,17 @@ jobs:
     runs-on: windows-latest
     needs: build-onedir
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
           name: nitrokey-app-onedir
-          path: nitrokey-app
+          path: dist/nitrokey-app
       - name: Create sources file
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
-          heat dir .\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
+          heat dir .\dist\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
       - name: Build object files
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
@@ -74,7 +76,7 @@ jobs:
       - name: Build installer package
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
-          light -b .\nitrokey-app\ .\Product.wixobj .\Sources.wixobj -o nitrokey-app.msi
+          light -b .\dist\nitrokey-app\ .\Product.wixobj .\Sources.wixobj -o nitrokey-app.msi
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
