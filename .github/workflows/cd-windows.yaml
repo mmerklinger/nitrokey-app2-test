@@ -80,7 +80,7 @@ jobs:
       - name: Build installer package
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
-          light -b .\dist\nitrokey-app\ .\Product.wixobj .\Sources.wixobj -o nitrokey-app.msi
+          light -b .\dist\nitrokey-app\ -sice:ICE80 .\Product.wixobj .\Sources.wixobj -o nitrokey-app.msi
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
