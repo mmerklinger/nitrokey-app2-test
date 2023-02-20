@@ -22,7 +22,9 @@ jobs:
           .\venv\Scripts\pip install flit
           .\venv\Scripts\flit install --symlink
       - name: Create Windows version info file
-        run: create-version-file --outfile .\ci-scripts\windows\pyinstaller\file_version_info.txt --version "$(Get-Content .\nitrokeyapp\VERSION)" .\ci-scripts\windows\pyinstaller\file_version_info_metadata.yaml
+        run: |
+          .\venv\Scripts\Activate.ps1
+          create-version-file --outfile .\ci-scripts\windows\pyinstaller\file_version_info.txt --version "$(Get-Content .\nitrokeyapp\VERSION)" .\ci-scripts\windows\pyinstaller\file_version_info_metadata.yaml
       - name: Build onedir
         run: |
           .\venv\Scripts\Activate.ps1
