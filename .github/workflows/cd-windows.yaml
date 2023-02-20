@@ -21,6 +21,8 @@ jobs:
           .\venv\Scripts\pip install pip
           .\venv\Scripts\pip install flit
           .\venv\Scripts\flit install --symlink
+      - name: Create Windows version info file
+        run: create-version-file --outfile .\ci-scripts\windows\pyinstaller\file_version_info.txt --version "$(Get-Content .\nitrokeyapp\VERSION)" .\ci-scripts\windows\pyinstaller\file_version_info_metadata.yaml
       - name: Build onedir
         run: |
           .\venv\Scripts\Activate.ps1
@@ -67,12 +69,12 @@ jobs:
       - name: Create sources file
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
-          heat dir .\dist\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
+          heat dir .\dist\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -suid -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
       - name: Build object files
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
-          candle .\ci-scripts\windows\wix\Product.wxs -out Product.wixobj
-          candle .\Sources.wxs .\Sources.wixobj
+          candle .\ci-scripts\windows\wix\Product.wxs -o Product.wixobj
+          candle .\Sources.wxs -o .\Sources.wixobj
       - name: Build installer package
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"

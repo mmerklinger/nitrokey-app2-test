@@ -51,4 +51,5 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon=['nitrokey-app.ico'],
+    version='file_version_info.txt',
 )

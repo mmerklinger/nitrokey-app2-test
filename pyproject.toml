@@ -37,6 +37,7 @@ dev = [
   "isort",
   "mypy >=0.900,<0.990",
   "pyinstaller",
+  "pyinstaller-versionfile; sys_platform=='win32'",
 ]
 
 [project.urls]
