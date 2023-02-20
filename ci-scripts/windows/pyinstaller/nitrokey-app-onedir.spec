@@ -13,7 +13,6 @@ a = Analysis(
     datas=[
         ('..\\..\\..\\venv\\Lib\\site-packages\\pynitrokey\\VERSION', 'pynitrokey'),
         ('..\\..\\..\\venv\\Lib\\site-packages\\fido2\\public_suffix_list.dat', 'fido2'),
-        ('..\\..\\..\\venv\\Lib\\site-packages\\frozendict\\VERSION', 'frozendict'),
         ('..\\..\\..\\nitrokeyapp\\ui', 'nitrokeyapp\\ui'),
         ('..\\..\\..\\nitrokeyapp\\VERSION', 'nitrokeyapp\\VERSION'),
         ('..\\..\\..\\LICENSE', '.')
