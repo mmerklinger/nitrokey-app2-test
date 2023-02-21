@@ -28,7 +28,8 @@ jobs:
       - name: Build
         run: |
           . venv/bin/activate
-          pyinstaller ci-scripts/linux/pyinstaller/nitrokey-app-onefile.spec
+          pyinstaller \
+            ci-scripts/linux/pyinstaller/nitrokey-app-onefile.spec
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -47,9 +48,16 @@ jobs:
         with:
           name: nitrokey-app-onefile
       - name: Rename binary
-        run: mv nitrokey-app nitrokey-app-${{ github.event.release.tag_name }}-linux64-binary
+        run: |
+          mv \
+            nitrokey-app \
+            nitrokey-app-${{ github.event.release.tag_name }}-linux64-binary
       - name: Create archive
-        run: tar -czvf nitrokey-app-${{ github.event.release.tag_name }}-linux64-binary.tar.gz nitrokey-app-${{ github.event.release.tag_name }}-linux64-binary
+        run: |
+          tar \
+          -czvf \
+          nitrokey-app-${{ github.event.release.tag_name }}-linux64-binary.tar.gz \
+          nitrokey-app-${{ github.event.release.tag_name }}-linux64-binary
       - name: Publish release
         uses: softprops/action-gh-release@v1
         with:

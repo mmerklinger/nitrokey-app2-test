@@ -87,7 +87,7 @@ jobs:
             -ag `
             -cg DynamicFragment `
             -ke `
-            -srd -sfrag -suid -sreg`
+            -srd -sfrag -suid -sreg `
             -nologo `
             -pog:Binaries `
             -pog:Documents `
@@ -133,8 +133,8 @@ jobs:
       - name: Create archive
         run: |
           7z a -tzip -mx9 `
-          nitrokey-app-${{ github.event.release.tag_name }}-win64-binary.zip `
-          nitrokey-app-${{ github.event.release.tag_name }}-win64-binary.exe
+            nitrokey-app-${{ github.event.release.tag_name }}-win64-binary.zip `
+            nitrokey-app-${{ github.event.release.tag_name }}-win64-binary.exe
       - name: Publish release
         uses: softprops/action-gh-release@v1
         with:
