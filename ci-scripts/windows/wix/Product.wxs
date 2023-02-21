@@ -5,7 +5,7 @@
         Language="1033"
         Version="!(bind.FileVersion.nitrokey_app.exe)"
         Manufacturer="Nitrokey GmbH"
-        UpgradeCode="{2457FACC-3052-4573-A624-5E8BB8ABE562}">
+        UpgradeCode="{F928EC81-A9D6-4022-BE9B-EC35EF33444F}">
 
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" />
     

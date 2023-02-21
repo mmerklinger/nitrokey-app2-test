@@ -24,7 +24,10 @@ jobs:
       - name: Create Windows version info file
         run: |
           .\venv\Scripts\Activate.ps1
-          create-version-file --outfile .\ci-scripts\windows\pyinstaller\file_version_info.txt --version "$(Get-Content .\nitrokeyapp\VERSION)" .\ci-scripts\windows\pyinstaller\file_version_info_metadata.yaml
+          create-version-file `
+            --outfile .\ci-scripts\windows\pyinstaller\file_version_info.txt `
+            --version "$(Get-Content .\nitrokeyapp\VERSION)" `
+            .\ci-scripts\windows\pyinstaller\file_version_info_metadata.yaml
       - name: Build onedir
         run: |
           .\venv\Scripts\Activate.ps1
@@ -50,7 +53,10 @@ jobs:
       - name: Create Windows version info file
         run: |
           .\venv\Scripts\Activate.ps1
-          create-version-file --outfile .\ci-scripts\windows\pyinstaller\file_version_info.txt --version "$(Get-Content .\nitrokeyapp\VERSION)" .\ci-scripts\windows\pyinstaller\file_version_info_metadata.yaml
+          create-version-file `
+            --outfile .\ci-scripts\windows\pyinstaller\file_version_info.txt `
+            --version "$(Get-Content .\nitrokeyapp\VERSION)" `
+            .\ci-scripts\windows\pyinstaller\file_version_info_metadata.yaml
       - name: Build onefile
         run: |
           .\venv\Scripts\Activate.ps1
@@ -75,7 +81,20 @@ jobs:
       - name: Create sources file
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
-          heat dir .\dist\nitrokey-app\ -dr INSTALLFOLDER -ag -cg DynamicFragment -ke -srd -sfrag -suid -nologo -pog:Binaries -pog:Documents -pog:Satellites -pog:Sources -pog:Content -sreg -o Sources.wxs
+          heat `
+            dir .\dist\nitrokey-app\ `
+            -dr INSTALLFOLDER `
+            -ag `
+            -cg DynamicFragment `
+            -ke `
+            -srd -sfrag -suid -sreg`
+            -nologo `
+            -pog:Binaries `
+            -pog:Documents `
+            -pog:Satellites `
+            -pog:Sources `
+            -pog:Content `
+            -o Sources.wxs
       - name: Build object files
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
@@ -84,7 +103,12 @@ jobs:
       - name: Build installer package
         run: |
           $Env:Path += ";" + "$Env:WIX" + "bin"
-          light -b .\dist\nitrokey-app\ -sice:ICE80 .\Product.wixobj .\Sources.wixobj -o nitrokey-app.msi
+          light `
+            -b .\dist\nitrokey-app\ `
+            -sice:ICE80 `
+            .\Product.wixobj `
+            .\Sources.wixobj `
+            -o nitrokey-app.msi
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
@@ -102,9 +126,15 @@ jobs:
         with:
           name: nitrokey-app-onefile
       - name: Rename binary
-        run: mv nitrokey-app.exe nitrokey-app-${{ github.event.release.tag_name }}-win64-binary.exe
+        run: |
+          mv `
+            nitrokey-app.exe `
+            nitrokey-app-${{ github.event.release.tag_name }}-win64-binary.exe
       - name: Create archive
-        run: 7z a -tzip -mx9 nitrokey-app-${{ github.event.release.tag_name }}-win64-binary.zip nitrokey-app-${{ github.event.release.tag_name }}-win64-binary.exe
+        run: |
+          7z a -tzip -mx9 `
+          nitrokey-app-${{ github.event.release.tag_name }}-win64-binary.zip `
+          nitrokey-app-${{ github.event.release.tag_name }}-win64-binary.exe
       - name: Publish release
         uses: softprops/action-gh-release@v1
         with:
@@ -121,7 +151,10 @@ jobs:
         with:
           name: nitrokey-app-installer
       - name: Rename installer
-        run: mv nitrokey-app.msi nitrokey-app-${{ github.event.release.tag_name }}-win64.msi
+        run: |
+          mv `
+            nitrokey-app.msi `
+            nitrokey-app-${{ github.event.release.tag_name }}-win64.msi
       - name: Publish release
         uses: softprops/action-gh-release@v1
         with:
