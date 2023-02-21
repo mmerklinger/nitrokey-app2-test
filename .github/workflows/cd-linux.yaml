@@ -15,15 +15,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Check version tag format
-        shell: bash
         run: |
-          tag_version="${{ github.event.release.tag_name }}"
-          if [ $tag_version ~= "^v[0-9]+.[0-9]+.[0-9]+$" ]; then exit 0; else exit 1; fi
+          TAG_VERSION="${{ github.event.release.tag_name }}"
+          echo $TAG_VERSION
+          if [ $TAG_VERSION ~= "^v[0-9]+.[0-9]+.[0-9]+$" ]; then exit 0; else exit 1; fi
       - name: Check if version tag and package version are equal
-        shell: bash
         run: |
-          tag_version="${{ github.event.release.tag_name }}"
-          if [ ${tag_version:1} == $(cat nitrokeyapp/VERSION) ]; then exit 0; else exit 1; fi
+          TAG_VERSION="${{ github.event.release.tag_name }}"
+          if [ ${TAG_VERSION:1} == $(cat nitrokeyapp/VERSION) ]; then exit 0; else exit 1; fi
   build-onefile:
     name: Build onefile
     runs-on: ubuntu-latest
