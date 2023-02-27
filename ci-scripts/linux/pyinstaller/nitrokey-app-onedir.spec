@@ -14,7 +14,7 @@ a = Analysis(
         ('../../../venv/lib/python3.9/site-packages/pynitrokey/VERSION', 'pynitrokey'),
         ('../../../venv/lib/python3.9/site-packages/fido2/public_suffix_list.dat', 'fido2'),
         ('../../../nitrokeyapp/ui', 'nitrokeyapp/ui'),
-        ('../../../nitrokeyapp/VERSION', 'nitrokeyapp/VERSION'),
+        ('../../../nitrokeyapp/VERSION', 'nitrokeyapp'),
         ('../../../LICENSE', '.')
     ],
     hiddenimports=[],
